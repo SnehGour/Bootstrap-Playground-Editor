@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 const CodeEditor = () => {
-  const [code, setCode] = useState(
-    `<!DOCTYPE html>
+  const [code, setCode] = useState(`<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -17,14 +16,15 @@ const CodeEditor = () => {
     <p>This is a boilerplate HTML code.</p>
   </div>
 </body>
-</html>`
-  );
+</html>`);
+
   const [output, setOutput] = useState('');
+  const [isHorizontal, setIsHorizontal] = useState(true);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setOutput(code);
-    }, 2000);
+    }, 500);
 
     return () => clearTimeout(timer);
   }, [code]);
@@ -33,8 +33,12 @@ const CodeEditor = () => {
     setCode(e.target.value);
   };
 
+  const toggleLayout = () => {
+    setIsHorizontal((prevState) => !prevState);
+  };
+
   return (
-    <div className="code-editor" style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div className="code-editor" style={{ height: '100vh', display: 'flex', flexDirection: isHorizontal ? 'row' : 'column' }}>
       <div className="editor-container" style={{ flex: '1', display: 'flex', flexDirection: 'column' }}>
         <h4>Code Editor</h4>
         <textarea
@@ -43,7 +47,6 @@ const CodeEditor = () => {
           style={{ backgroundColor: 'black', color: 'white', border: 'none', resize: 'none', padding: '10px', height: '100%' }}
           value={code}
           onChange={handleCodeChange}
-          spellCheck="false"
         ></textarea>
       </div>
       <div className="output-container" style={{ flex: '1' }}>
@@ -52,8 +55,12 @@ const CodeEditor = () => {
           title="output"
           srcDoc={output}
           style={{ width: '100%', height: '100%', border: '1px solid #ccc' }}
+          spellCheck='false'
         ></iframe>
       </div>
+      <button className='btn btn-dark' onClick={toggleLayout} style={{ position: 'absolute', bottom: '10px', right: '10px', zIndex: '9999' }}>
+        Toggle Layout
+      </button>
     </div>
   );
 };
