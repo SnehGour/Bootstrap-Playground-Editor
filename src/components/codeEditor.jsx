@@ -37,6 +37,16 @@ const CodeEditor = () => {
     setIsHorizontal((prevState) => !prevState);
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      const { selectionStart, selectionEnd, value } = e.target;
+      const newValue = value.substring(0, selectionStart) + '    ' + value.substring(selectionEnd);
+      setCode(newValue);
+    }
+  };
+
+
   return (
     <div className="code-editor" style={{ height: '100vh', display: 'flex', flexDirection: isHorizontal ? 'row' : 'column' }}>
       <div className="editor-container" style={{ flex: '1', display: 'flex', flexDirection: 'column' }}>
@@ -47,6 +57,7 @@ const CodeEditor = () => {
           style={{ backgroundColor: 'black', color: 'white', border: 'none', resize: 'none', padding: '10px', height: '100%' }}
           value={code}
           onChange={handleCodeChange}
+          onKeyDown={handleKeyDown}
         ></textarea>
       </div>
       <div className="output-container" style={{ flex: '1' }}>
